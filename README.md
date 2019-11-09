@@ -6,6 +6,34 @@
 
 ### Usage
 
+Update `.env`
+```dotenv
+TWILIO_ACCOUNT_SID=
+TWILIO_AUTH_TOKEN=
+TWILIO_NUMBER=
+#TWILIO_USERNAME=
+#TWILIO_PASSWORD=
+```
+
+Implement `Notifiable`
+```php
+/**
+ * @property string phone
+ * @property string phone_number
+ */
+clas User extends Authenticable {
+    use Notifiable;
+
+...
+
+    public function routeNotificationForTwilio() {
+        return "+{$this->phone}";
+    }
+}
+```
+
+
+Implement notification
 ```php
 class TwilioTestNotification extends Notification {
 
@@ -43,11 +71,10 @@ class TwilioTestNotification extends Notification {
             ->from('+sender') // optional
             ->mediaUrl('publicly accessible media url'); // required
     }
-
-...
-
 }
 ```
+
+> If you don't use the `->to('+number')` method in your message construction, you must have `phone`, `phone_number` property or `routeNotificationForTwilio()` method implemented in your `Notifiable` implementation. The number must start with `+` followed by country code.
 
 ### Events
 * `TwilioNotificationSuccess::class` [gives access to `InstanceResource` at `$event->message`]
