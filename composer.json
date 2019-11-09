@@ -1,0 +1,27 @@
+{
+  "name": "i-rocky/laravel-twilio",
+  "description": "Twilio Fax, SMS, Call notification support for laravel",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Rocky",
+      "email": "wpkpda@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Rocky\\LaravelTwilio\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "discover": [
+        "Rocky\\LaravelTwilio\\Providers\\LaravelTwilioServiceProvider"
+      ]
+    }
+  },
+  "require": {
+    "twilio/sdk": "^5.38"
+  }
+}
