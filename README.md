@@ -90,5 +90,5 @@ class TwilioTestNotification extends Notification {
 > If you don't use the `->to('+number')` method in your message construction, you must have `phone`, `phone_number` property or `routeNotificationForTwilio()` method implemented in your `Notifiable` implementation. The number must start with `+` followed by country code.
 
 ### Events
-* `TwilioNotificationSuccess::class` [gives access to `InstanceResource` at `$event->message`]
-* `TwilioNotificationFailed::class` [gives access to `Exception` at `$event->exception`]
+* `TwilioNotificationSuccess::class` [gives access to `InstanceResource` at `$event->message` and `$notifiable` at `$event->notifiable`]
+* `TwilioNotificationFailed::class` [gives access to `Exception` at `$event->exception`, `Notification` at `$event->notification`, `$notifiable` at `$event->notifiable`]

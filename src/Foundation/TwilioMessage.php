@@ -6,7 +6,6 @@ use Rocky\LaravelTwilio\Exceptions\MediaUrlUndefinedException;
 use Rocky\LaravelTwilio\Exceptions\MessageContentUndefinedException;
 use Rocky\LaravelTwilio\Exceptions\ReceiverUndefinedException;
 use Rocky\LaravelTwilio\LaravelTwilio;
-use Twilio\Rest\Api\V2010\Account\MessageInstance;
 
 abstract class TwilioMessage
 {

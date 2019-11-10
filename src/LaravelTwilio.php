@@ -2,6 +2,8 @@
 
 namespace Rocky\LaravelTwilio;
 
+use Rocky\LaravelTwilio\Services\TwilioService;
+
 class LaravelTwilio
 {
     /**

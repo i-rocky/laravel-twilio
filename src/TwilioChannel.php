@@ -45,15 +45,20 @@ class TwilioChannel
 
             $instance = $message->send($notifiable, $this->laravelTwilio);
 
-            $event = new TwilioNotificationSuccess($instance);
+            $event = new TwilioNotificationSuccess($instance, $notifiable);
             $this->_dispatchEvent($event);
         } catch (Exception $exception) {
             // no point retrying
-            $event = new TwilioNotificationFailed($exception);
+            $event = new TwilioNotificationFailed($exception, $notifiable, $notification);
             $this->_dispatchEvent($event);
         }
     }
 
+    /**
+     * Dispatches a given event
+     *
+     * @param $event
+     */
     private function _dispatchEvent($event)
     {
         if (function_exists('event')) {
