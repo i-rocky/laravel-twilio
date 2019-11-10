@@ -156,6 +156,8 @@ abstract class TwilioMessage
      * @param  LaravelTwilio  $laravelTwilio
      *
      * @return void
+     * @throws MediaUrlUndefinedException
+     * @throws MessageContentUndefinedException
      * @throws MessageTypeUndefinedException
      * @throws ReceiverUndefinedException
      */
@@ -166,8 +168,8 @@ abstract class TwilioMessage
             'type'     => $this->_getType(),
             'receiver' => $this->_getReceiver($notifiable),
             'sender'   => $this->_getSender($laravelTwilio),
-            'text'     => $this->_content,
-            'mediaUrl' => $this->_mediaUrl,
+            'text'     => $this->_getContent(),
+            'mediaUrl' => $this->_getMediaUrl(),
         ]);
         $message->save();
 
