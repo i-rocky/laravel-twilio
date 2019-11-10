@@ -3,12 +3,13 @@
 namespace Rocky\LaravelTwilio\Events;
 
 use Exception;
+use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
 
-class TwilioNotificationFailed
+class LaravelTwilioNotificationFailed
 {
-    use SerializesModels;
+    use Dispatchable, SerializesModels;
 
     /**
      * @var Exception

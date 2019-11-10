@@ -24,12 +24,16 @@ use Illuminate\Database\Eloquent\Model;
 class LaravelTwilioMessage extends Model
 {
     protected $fillable = [
-        'type', // sms, fax, mms
+        'type',
         'receiver',
         'sender',
         'text',
         'mediaUrl',
         'status',
         'response',
+    ];
+
+    protected $casts = [
+        'response' => 'json',
     ];
 }

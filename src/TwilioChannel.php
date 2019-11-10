@@ -5,8 +5,8 @@ namespace Rocky\LaravelTwilio;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Notifications\Notification;
-use Rocky\LaravelTwilio\Events\TwilioNotificationFailed;
-use Rocky\LaravelTwilio\Events\TwilioNotificationSuccess;
+use Rocky\LaravelTwilio\Events\LaravelTwilioNotificationFailed;
+use Rocky\LaravelTwilio\Events\LaravelTwilioNotificationSent;
 use Rocky\LaravelTwilio\Foundation\TwilioMessage;
 
 class TwilioChannel
@@ -45,11 +45,11 @@ class TwilioChannel
 
             $instance = $message->send($notifiable, $this->laravelTwilio);
 
-            $event = new TwilioNotificationSuccess($instance, $notifiable);
+            $event = new LaravelTwilioNotificationSent($instance, $notifiable);
             $this->_dispatchEvent($event);
         } catch (Exception $exception) {
             // no point retrying
-            $event = new TwilioNotificationFailed($exception, $notifiable, $notification);
+            $event = new LaravelTwilioNotificationFailed($exception, $notifiable, $notification);
             $this->_dispatchEvent($event);
         }
     }

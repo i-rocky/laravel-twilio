@@ -38,6 +38,9 @@ class LaravelTwilioServiceProvider extends ServiceProvider
     {
         $this->_loadConfig();
         $this->_registerConfigProvider();
+
+        $this->app->register(RouteServiceProvider::class);
+        $this->app->register(EventServiceProvider::class);
     }
 
     /**
@@ -132,14 +135,6 @@ class LaravelTwilioServiceProvider extends ServiceProvider
         $this->commands([
             InstallLaravelTwilio::class,
         ]);
-    }
-
-    /**
-     *
-     */
-    private function _loadRoutes()
-    {
-
     }
 
     /**

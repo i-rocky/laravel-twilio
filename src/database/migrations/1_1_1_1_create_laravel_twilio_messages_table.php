@@ -20,7 +20,7 @@ class CreateLaravelTwilioMessagesTable extends Migration
             $table->string('sender');
             $table->string('text')->nullable();
             $table->string('mediaUrl')->nullable();
-            $table->string('status');
+            $table->string('status')->nullable();
             $table->text('response')->nullable();
             $table->timestamps();
         });

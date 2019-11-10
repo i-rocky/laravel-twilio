@@ -12,6 +12,7 @@ use Twilio\Rest\Api\V2010\Account\CallInstance;
 class TwilioCallMessage extends TwilioMessage
 {
     protected $_mediaUrlRequired = true;
+    protected $_type = 'Call';
 
     /**
      * @param $notifiable
@@ -22,7 +23,7 @@ class TwilioCallMessage extends TwilioMessage
      * @throws TwilioException
      * @throws MediaUrlUndefinedException
      */
-    public function send($notifiable, LaravelTwilio $laravelTwilio)
+    protected function _send($notifiable, LaravelTwilio $laravelTwilio)
     {
         $receiver = $this->_getReceiver($notifiable);
         $sender   = $this->_getSender($laravelTwilio);

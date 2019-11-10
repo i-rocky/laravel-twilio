@@ -4,8 +4,12 @@ namespace Rocky\LaravelTwilio\Foundation;
 
 use Rocky\LaravelTwilio\Exceptions\MediaUrlUndefinedException;
 use Rocky\LaravelTwilio\Exceptions\MessageContentUndefinedException;
+use Rocky\LaravelTwilio\Exceptions\MessageNotStoredException;
+use Rocky\LaravelTwilio\Exceptions\MessageTypeUndefinedException;
 use Rocky\LaravelTwilio\Exceptions\ReceiverUndefinedException;
 use Rocky\LaravelTwilio\LaravelTwilio;
+use Rocky\LaravelTwilio\Models\LaravelTwilioMessage;
+use Twilio\Rest\Api\V2010\Account\MessageInstance;
 
 abstract class TwilioMessage
 {
@@ -15,6 +19,24 @@ abstract class TwilioMessage
     private $_content;
     protected $_mediaUrlRequired = false;
     private $_mediaUrl;
+    protected $_type;
+    /** @var LaravelTwilioMessage */
+    protected $message;
+
+    /**
+     * For developers
+     *
+     * @return mixed
+     * @throws MessageTypeUndefinedException
+     */
+    protected function _getType()
+    {
+        if ( ! $this->_type) {
+            throw new MessageTypeUndefinedException();
+        }
+
+        return $this->_type;
+    }
 
     /**
      * @param $sender
@@ -133,7 +155,65 @@ abstract class TwilioMessage
      * @param $notifiable
      * @param  LaravelTwilio  $laravelTwilio
      *
-     * @return mixed
+     * @return void
+     * @throws MessageTypeUndefinedException
+     * @throws ReceiverUndefinedException
      */
-    abstract public function send($notifiable, LaravelTwilio $laravelTwilio);
+    protected function storeMessage($notifiable, LaravelTwilio $laravelTwilio)
+    {
+        $message = new LaravelTwilioMessage();
+        $message->fill([
+            'type'     => $this->_getType(),
+            'receiver' => $this->_getReceiver($notifiable),
+            'sender'   => $this->_getSender($laravelTwilio),
+            'text'     => $this->_content,
+            'mediaUrl' => $this->_mediaUrl,
+        ]);
+        $message->save();
+
+        $this->message = $message;
+    }
+
+    /**
+     * @return string
+     * @throws MessageNotStoredException
+     */
+    protected function _getStatusCallbackRoute()
+    {
+        if ( ! $this->message) {
+            throw new MessageNotStoredException();
+        }
+
+        return route('api.laravel-twilio.report', ['laravel_twilio_message' => $this->message->id]);
+    }
+
+    /**
+     * @param $notifiable
+     * @param  LaravelTwilio  $laravelTwilio
+     *
+     * @return LaravelTwilioMessage
+     * @throws MessageTypeUndefinedException
+     * @throws ReceiverUndefinedException
+     */
+    public function send($notifiable, LaravelTwilio $laravelTwilio)
+    {
+        $this->storeMessage($notifiable, $laravelTwilio);
+
+        $response = $this->_send($notifiable, $laravelTwilio);
+
+        $this->message->update([
+            'status'   => $response->status,
+            'response' => $response->toArray(),
+        ]);
+
+        return $this->message;
+    }
+
+    /**
+     * @param $notifiable
+     * @param  LaravelTwilio  $laravelTwilio
+     *
+     * @return MessageInstance
+     */
+    abstract protected function _send($notifiable, LaravelTwilio $laravelTwilio);
 }

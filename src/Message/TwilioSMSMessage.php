@@ -3,6 +3,7 @@
 namespace Rocky\LaravelTwilio\Message;
 
 use Rocky\LaravelTwilio\Exceptions\MessageContentUndefinedException;
+use Rocky\LaravelTwilio\Exceptions\MessageNotStoredException;
 use Rocky\LaravelTwilio\Exceptions\ReceiverUndefinedException;
 use Rocky\LaravelTwilio\Foundation\TwilioMessage;
 use Rocky\LaravelTwilio\LaravelTwilio;
@@ -12,6 +13,7 @@ use Twilio\Rest\Api\V2010\Account\MessageInstance;
 class TwilioSMSMessage extends TwilioMessage
 {
     protected $_contentRequired = true;
+    protected $_type = 'SMS';
 
     /**
      * @param $notifiable
@@ -21,8 +23,9 @@ class TwilioSMSMessage extends TwilioMessage
      * @throws MessageContentUndefinedException
      * @throws ReceiverUndefinedException
      * @throws TwilioException
+     * @throws MessageNotStoredException
      */
-    public function send($notifiable, LaravelTwilio $laravelTwilio)
+    protected function _send($notifiable, LaravelTwilio $laravelTwilio)
     {
         $receiver = $this->_getReceiver($notifiable);
         $sender   = $this->_getSender($laravelTwilio);
@@ -32,8 +35,9 @@ class TwilioSMSMessage extends TwilioMessage
             ->getTwilioService()
             ->messages
             ->create($receiver, [
-                'body' => $content,
-                'from' => $sender,
+                'body'           => $content,
+                'from'           => $sender,
+                'statusCallback' => $this->_getStatusCallbackRoute(),
             ]);
     }
 }
