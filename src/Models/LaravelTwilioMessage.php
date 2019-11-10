@@ -34,6 +34,6 @@ class LaravelTwilioMessage extends Model
     ];
 
     protected $casts = [
-        'response' => 'json',
+        'response' => 'object',
     ];
 }
