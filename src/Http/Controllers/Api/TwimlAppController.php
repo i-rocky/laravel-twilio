@@ -45,13 +45,18 @@ class TwimlAppController extends Controller
         if ($canGetIn && $request->get('To')) {
             // call acceptable
             $callerId = $outbound ? config('services.twilio.caller_id') : $request->get('From');
-            $response
-                ->dial(null, ['callerId' => $callerId])
-                ->number($request->get('To'), [
-                    'statusCallbackEvent'  => 'initiated ringing answered completed',
-                    'statusCallback'       => route('api.laravel-twilio.voice.status'),
-                    'statusCallbackMethod' => 'POST',
-                ]);
+            $dial     = $response->dial(null, ['callerId' => $callerId]);
+            $attrs    = [
+                'statusCallbackEvent'  => 'initiated ringing answered completed',
+                'statusCallback'       => route('api.laravel-twilio.voice.status'),
+                'statusCallbackMethod' => 'POST',
+            ];
+
+            if (preg_match("/^[\d\+\-\(\) ]+$/", $request->get('To'))) {
+                $dial->number($request->get('To'), $attrs);
+            } else {
+                $dial->client($request->get('To'), $attrs);
+            }
 
             // dispatch event
             $eventClass = $outbound ? LaravelTwilioOutboundCall::class : LaravelTwilioInboundCall::class;
@@ -70,6 +75,7 @@ class TwimlAppController extends Controller
             }
         }
         $xml = $response->asXML();
+        \Log::info($xml);
 
         return response($xml, 200, ['Content-Type' => 'application/xml']);
     }
@@ -81,7 +87,7 @@ class TwimlAppController extends Controller
      */
     public function getCapabilityToken(Request $request)
     {
-        $identity = Str::snake($request->user()->first_name);
+        $identity = 'rocky';//Str::snake($request->user()->first_name);
 
         $clientToken = new ClientToken(config('services.twilio.account_sid'), config('services.twilio.auth_token'));
         $clientToken->allowClientOutgoing(config('services.twilio.app_sid'));
