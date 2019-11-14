@@ -44,10 +44,11 @@ class TwimlAppController extends Controller
         $canGetIn = $outbound || config('laravel-twilio.call.enable');
         if ($canGetIn && $request->get('To')) {
             // call acceptable
+            $callerId = $outbound ? config('services.twilio.caller_id') : $request->get('From');
             $response
-                ->dial(null, ['callerId' => config('services.twilio.caller_id')])
+                ->dial(null, ['callerId' => $callerId])
                 ->number($request->get('To'), [
-                    'statusCallbackEvent'  => ['initiated', 'ringing', 'answered', 'completed'],
+                    'statusCallbackEvent'  => 'initiated ringing answered completed',
                     'statusCallback'       => route('api.laravel-twilio.voice.status'),
                     'statusCallbackMethod' => 'POST',
                 ]);

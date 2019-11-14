@@ -2,9 +2,11 @@
 
 namespace Rocky\LaravelTwilio\Providers;
 
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 use Rocky\LaravelTwilio\Console\Commands\InstallLaravelTwilio;
+use Rocky\LaravelTwilio\Http\Middleware\VerifyTwilioRequest;
 use Rocky\LaravelTwilio\LaravelTwilio;
 use Rocky\LaravelTwilio\Services\TwilioService;
 use Rocky\LaravelTwilio\TwilioChannel;
@@ -33,6 +35,8 @@ class LaravelTwilioServiceProvider extends ServiceProvider
 
     /**
      * Does something
+     *
+     * @throws BindingResolutionException
      */
     public function register()
     {
@@ -41,6 +45,8 @@ class LaravelTwilioServiceProvider extends ServiceProvider
 
         $this->app->register(RouteServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
+
+        $this->app->make('router')->aliasMiddleware('verify-twilio-request', VerifyTwilioRequest::class);
     }
 
     /**
@@ -111,7 +117,8 @@ class LaravelTwilioServiceProvider extends ServiceProvider
     private function _publishMigrations()
     {
         $this->publishes([
-            __DIR__.'/../database/migrations/1_1_1_1_create_laravel_twilio_messages_table.php' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_laravel_twilio_messages_table.php'),
+            __DIR__.'/../database/migrations/1_1_1_1_create_laravel_twilio_messages_table.php' => database_path('migrations/'.date('Y_m_d_His',
+                    time()).'_create_laravel_twilio_messages_table.php'),
         ], 'migrations');
     }
 
