@@ -86,7 +86,7 @@ class TwimlAppController extends Controller
      */
     public function getCapabilityToken(Request $request)
     {
-        $identity = 'rocky';//Str::snake($request->user()->first_name);
+        $identity = Str::snake($request->user()->first_name);
 
         $clientToken = new ClientToken(config('services.twilio.account_sid'), config('services.twilio.auth_token'));
         $clientToken->allowClientOutgoing(config('services.twilio.app_sid'));
