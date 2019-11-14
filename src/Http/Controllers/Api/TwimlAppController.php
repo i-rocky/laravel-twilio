@@ -99,11 +99,12 @@ class TwimlAppController extends Controller
      */
     public function voiceStatusReport(Request $request)
     {
-        $accountSid = $request->get('AccountSid');
-        $callSid    = $request->get('CallSid');
-        $callStatus = $request->get('CallStatus');
+        $accountSid   = $request->get('AccountSid');
+        $callSid      = $request->get('CallSid');
+        $callStatus   = $request->get('CallStatus');
+        $callDuration = $request->get('CallDuration');
 
-        $status = new CallStatus($accountSid, $callSid, $callStatus);
+        $status = new CallStatus($accountSid, $callSid, $callStatus, $callDuration);
 
         event(new LaravelTwilioCallStatusUpdate($status));
 

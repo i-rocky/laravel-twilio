@@ -9,6 +9,7 @@ class CallStatus
     private $accountSid;
     private $callSid;
     private $callStatus;
+    private $callDuration;
 
     /**
      * CallStatus constructor.
@@ -16,13 +17,23 @@ class CallStatus
      * @param $accountSid
      * @param $callSid
      * @param $callStatus
+     * @param $callDuration
      */
-    public function __construct($accountSid, $callSid, $callStatus)
+    public function __construct($accountSid, $callSid, $callStatus, $callDuration)
     {
 
         $this->accountSid = $accountSid;
         $this->callSid    = $callSid;
         $this->callStatus = $callStatus;
+        $this->callDuration = $callDuration;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCallDuration()
+    {
+        return $this->callDuration;
     }
 
     /**
