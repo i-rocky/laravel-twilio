@@ -75,7 +75,6 @@ class TwimlAppController extends Controller
             }
         }
         $xml = $response->asXML();
-        \Log::info($xml);
 
         return response($xml, 200, ['Content-Type' => 'application/xml']);
     }
