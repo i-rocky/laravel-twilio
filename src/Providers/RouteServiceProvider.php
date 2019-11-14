@@ -4,21 +4,10 @@ namespace Rocky\LaravelTwilio\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
-use Rocky\LaravelTwilio\Models\LaravelTwilioMessage;
 
 class RouteServiceProvider extends ServiceProvider
 {
     protected $namespace = 'Rocky\LaravelTwilio\Http\Controllers';
-
-    /**
-     *
-     */
-    public function boot()
-    {
-        parent::boot();
-
-        Route::model('laravel_twilio_message', LaravelTwilioMessage::class);
-    }
 
     /**
      * Map the routes for Laravel Twilio

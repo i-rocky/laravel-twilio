@@ -1,6 +1,11 @@
 <?php
 
 
-use Rocky\LaravelTwilio\Http\Controllers\Api\TwimlVoiceController;
+use Rocky\LaravelTwilio\Http\Controllers\Api\TwimlAppController;
 
-Route::get('voice/token', [TwimlVoiceController::class, 'getCapabilityToken'])->name('api.voice.token')->middleware('auth');
+Route::get('call', function () {
+    return view('laravel-twilio::call');
+});
+
+// voice
+Route::get('voice/token', [TwimlAppController::class, 'getCapabilityToken'])->name('voice.token')->middleware('auth');

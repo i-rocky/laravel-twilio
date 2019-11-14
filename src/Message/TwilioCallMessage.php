@@ -23,7 +23,7 @@ class TwilioCallMessage extends TwilioMessage
      * @throws TwilioException
      * @throws MediaUrlUndefinedException
      */
-    protected function _send($notifiable, LaravelTwilio $laravelTwilio)
+    public function send($notifiable, LaravelTwilio $laravelTwilio)
     {
         $receiver = $this->_getReceiver($notifiable);
         $sender   = $this->_getSender($laravelTwilio);

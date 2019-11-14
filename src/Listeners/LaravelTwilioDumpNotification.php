@@ -4,7 +4,7 @@ namespace Rocky\LaravelTwilio\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Rocky\LaravelTwilio\Events\LaravelTwilioNotificationSent;
+use Rocky\LaravelTwilio\Events\LaravelTwilioMessageSent;
 
 class LaravelTwilioDumpNotification
 {
@@ -21,14 +21,14 @@ class LaravelTwilioDumpNotification
     /**
      * Handle the event.
      *
-     * @param  LaravelTwilioNotificationSent  $event
+     * @param  LaravelTwilioMessageSent  $event
      *
      * @return void
      */
-    public function handle(LaravelTwilioNotificationSent $event)
+    public function handle(LaravelTwilioMessageSent $event)
     {
-        if (app()->runningInConsole() && app()->environment() === 'development') {
-            print_r($event->message->toArray());
+        if (app()->runningInConsole() && app()->environment() === 'local') {
+            dd($event->getMessage());
         }
     }
 }

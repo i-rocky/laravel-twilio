@@ -7,22 +7,23 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
 
-class LaravelTwilioNotificationFailed
+class LaravelTwilioMessageSendingFailed
 {
     use Dispatchable, SerializesModels;
 
     /**
      * @var Exception
      */
-    public $exception;
+    private $exception;
     /**
      * @var
      */
-    public $notifiable;
+    private $notifiable;
+
     /**
      * @var Notification
      */
-    public $notification;
+    private $notification;
 
     /**
      * TwilioNotificationFailed constructor.
@@ -33,8 +34,32 @@ class LaravelTwilioNotificationFailed
      */
     public function __construct(Exception $exception, $notifiable, Notification $notification)
     {
-        $this->exception = $exception;
-        $this->notifiable = $notifiable;
+        $this->exception    = $exception;
+        $this->notifiable   = $notifiable;
         $this->notification = $notification;
+    }
+
+    /**
+     * @return Exception
+     */
+    public function getException(): Exception
+    {
+        return $this->exception;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNotifiable()
+    {
+        return $this->notifiable;
+    }
+
+    /**
+     * @return Notification
+     */
+    public function getNotification(): Notification
+    {
+        return $this->notification;
     }
 }

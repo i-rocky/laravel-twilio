@@ -17,9 +17,9 @@ class TwilioConfig
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getSender()
+    public function getSender() : string
     {
         return $this->config['caller_id'];
     }

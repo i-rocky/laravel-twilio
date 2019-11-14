@@ -4,30 +4,32 @@ namespace Rocky\LaravelTwilio\Events;
 
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Rocky\LaravelTwilio\Models\LaravelTwilioMessage;
+use Rocky\LaravelTwilio\Contracts\IncomingMessage;
 
-class LaravelTwilioNotificationSent
+class LaravelTwilioIncomingMessage
 {
     use Dispatchable, SerializesModels;
 
     /**
-     * @var LaravelTwilioMessage
+     * @var IncomingMessage
      */
     public $message;
+
     /**
-     * @var
+     * @return IncomingMessage
      */
-    public $notifiable;
+    public function getMessage(): IncomingMessage
+    {
+        return $this->message;
+    }
 
     /**
      * TwilioNotificationSuccess constructor.
      *
-     * @param  LaravelTwilioMessage  $message
-     * @param $notifiable
+     * @param  IncomingMessage  $message
      */
-    public function __construct(LaravelTwilioMessage $message, $notifiable)
+    public function __construct(IncomingMessage $message)
     {
         $this->message = $message;
-        $this->notifiable = $notifiable;
     }
 }

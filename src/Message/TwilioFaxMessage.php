@@ -3,7 +3,6 @@
 namespace Rocky\LaravelTwilio\Message;
 
 use Rocky\LaravelTwilio\Exceptions\MediaUrlUndefinedException;
-use Rocky\LaravelTwilio\Exceptions\MessageNotStoredException;
 use Rocky\LaravelTwilio\Exceptions\ReceiverUndefinedException;
 use Rocky\LaravelTwilio\Foundation\TwilioMessage;
 use Rocky\LaravelTwilio\LaravelTwilio;
@@ -23,9 +22,8 @@ class TwilioFaxMessage extends TwilioMessage
      * @throws MediaUrlUndefinedException
      * @throws ReceiverUndefinedException
      * @throws TwilioException
-     * @throws MessageNotStoredException
      */
-    protected function _send($notifiable, LaravelTwilio $laravelTwilio)
+    public function send($notifiable, LaravelTwilio $laravelTwilio)
     {
         $receiver = $this->_getReceiver($notifiable);
         $sender   = $this->_getSender($laravelTwilio);
@@ -38,7 +36,7 @@ class TwilioFaxMessage extends TwilioMessage
             ->faxes
             ->create($receiver, $mediaUrl, [
                 'from'           => $sender,
-                'statusCallback' => $this->_getStatusCallbackRoute(),
+                'statusCallback' => $this->_getStatusCallbackRoute($laravelTwilio),
             ]);
     }
 }
