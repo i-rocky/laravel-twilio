@@ -22,7 +22,8 @@ const handlers = {
 
 export default {
   // initialize twilio caller
-  init(token_url) {
+  init() {
+    const token_url = process.env.MIX_LARAVEL_TWILIO_BASE_URL + '/voice/token';
     HttpService
         .get(token_url)
         .then(response => {
