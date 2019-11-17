@@ -55,15 +55,20 @@ Update `.env`
 TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
 TWILIO_NUMBER=
-TWIML_APP_SID= #you need to create a TwiML app for calling from browser
+TWIML_APP_SID=
 
-LARAVEL_TWILIO_BASE_URL=laravel-twilio #URL prefix for laravel-twilio 
+LARAVEL_TWILIO_BASE_URL=laravel-twilio 
 LARAVEL_TWILIO_ENABLE_CALL=true
 LARAVEL_TWILIO_RECORD_CALL=true
-LARAVEL_TWILIO_REJECT_CALL_MESSAGE="Thank you for calling us" #reject incoming calls with this message when calling is disabled
-LARAVEL_TWILIO_REPLY_MESSAGE=null #reply to incoming messages, null for no reply
+LARAVEL_TWILIO_REJECT_CALL_MESSAGE="Thank you for calling us"
+LARAVEL_TWILIO_REPLY_MESSAGE=null
 MIX_LARAVEL_TWILIO_BASE_URL="${LARAVEL_TWILIO_BASE_URL}"
 ```
+
+* `TWIML_APP_SID` - you need to create a TwiML app for calling from browser
+* `LARAVEL_TWILIO_BASE_URL` - URL prefix for laravel-twilio
+* `LARAVEL_TWILIO_REJECT_CALL_MESSAGE` - reject incoming calls with this message when calling is disabled
+* `LARAVEL_TWILIO_REPLY_MESSAGE` - reply to incoming messages, null for no reply 
 
 Now you have to set the Webhook URL in Twilio console.
 
