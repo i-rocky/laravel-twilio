@@ -35,6 +35,13 @@ class InstallLaravelTwilio extends Command
             '--tag'      => 'config',
         ]);
 
+        $this->info('Publishing assets...');
+
+        $this->call('vendor:publish', [
+            '--provider' => LaravelTwilioServiceProvider::class,
+            '--tag'      => 'assets',
+        ]);
+
         $this->info('Installed Laravel Twilio');
     }
 }

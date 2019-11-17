@@ -23,13 +23,10 @@ class LaravelTwilioServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->_publishConfig();
-            $this->_loadMigrations();
-            $this->_publishMigrations();
             $this->_publishAssets();
             $this->_registerCommands();
         }
 
-        $this->_loadViews();
         $this->_setupServiceContainer();
     }
 
@@ -109,31 +106,13 @@ class LaravelTwilioServiceProvider extends ServiceProvider
         ], 'config');
     }
 
-    private function _loadMigrations()
-    {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-    }
-
-    /**
-     *
-     */
-    private function _publishMigrations()
-    {
-        $this->publishes([
-            __DIR__.'/../database/migrations/1_1_1_1_create_laravel_twilio_messages_table.php' => database_path('migrations/'.date('Y_m_d_His',
-                    time()).'_create_laravel_twilio_messages_table.php'),
-        ], 'migrations');
-    }
-
     /**
      *
      */
     private function _publishAssets()
     {
         $this->publishes([
-            __DIR__.'/../resources/views'       => resource_path('views/vendor/laravel-twilio'),
             __DIR__.'/../resources/assets/js'   => resource_path('assets/js/vendor/laravel-twilio'),
-            __DIR__.'/../resources/assets/sass' => resource_path('assets/sass/vendor/laravel-twilio'),
         ], 'assets');
     }
 
@@ -145,13 +124,5 @@ class LaravelTwilioServiceProvider extends ServiceProvider
         $this->commands([
             InstallLaravelTwilio::class,
         ]);
-    }
-
-    /**
-     *
-     */
-    private function _loadViews()
-    {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'laravel-twilio');
     }
 }
