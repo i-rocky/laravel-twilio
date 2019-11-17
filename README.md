@@ -12,8 +12,8 @@ This should publish the following files
 
 ```tree
 project
-|   config
-|   |   laravel-twilio.php
+└───config
+|       laravel-twilio.php
 |
 └───resources
     └───assets
@@ -34,6 +34,10 @@ project
 > To use `TwilioService.js` run `yarn add axios twilio-client`
 
 You can add/update/remove/move the files and use as your wish
+
+
+
+
 ### Setup
 
 Update `config/services.php`
@@ -74,6 +78,8 @@ Now you have to set the Webhook URL in Twilio console.
 
 > Replace `laravel-twilio` in the Webhook URL with the base URL you've set for `LARAVEL_TWILIO_BASE_URL` in `.env`
 
+
+
 #### Incoming Calls
 Go to your phone number configuration from [Active Numbers](https://www.twilio.com/console/phone-numbers/incoming) then click on the desired number.
 
@@ -81,17 +87,34 @@ Go to your phone number configuration from [Active Numbers](https://www.twilio.c
 2. Under `Configure With` select `Webhooks, TwiML Bins, Functions, Studio, or Proxy`
 3. Under `A Call Comes In` select `Webhook` and set the value to `https://your-domain.tld/api/laravel-twilio/voice/incoming`
 
+
+
+#### Incoming Faxes
+Go to your phone number configuration from [Active Numbers](https://www.twilio.com/console/phone-numbers/incoming) then click on the desired number.
+
+1. Under `Voice & Fax` for `Accept Incoming` select `Faxes`
+2. Under `Configure With` select `Webhooks, TwiML Bins, Functions, Studio, or Proxy`
+3. Under `A Fax Comes In` select `Webhook` and set the value to `https://your-domain.tld/api/laravel-twilio/fax/incoming`
+
+
+
 #### Incoming Messages
 Go to your phone number configuration from [Active Numbers](https://www.twilio.com/console/phone-numbers/incoming) then click on the desired number.
 
 1. Under `Configure With` select `Webhooks, TwiML Bins, Functions, Studio, or Proxy`
 2. Under `A Message Comes In` select `Webhook` and set the value to `https://your-domain.tld/api/laravel-twilio/message/incoming`
 
+
+
+
 #### Outgoing Calls
 
 Go to [TwiML Apps](https://www.twilio.com/console/phone-numbers/runtime/twiml-apps) list and select desired app or create a new app
 
 1. Under `Voice` set the `REQUEST URI` to `https://your-domain.tld/api/laravel-twilio/voice`
+
+
+
 
 ### Usage
 
@@ -171,6 +194,9 @@ class TwilioTestNotification extends Notification {
 
 > If you don't have `username` property definition in your Auth provider model, you must implement `laravelTwilioIdentity()` method to give your agents an identity for calling.
 
+
+
+
 ### Events
 
 Namespace `Rocky\LaravelTwilio\Events`
@@ -203,5 +229,7 @@ $from = $call->from;
 $allParams = $call->all();
 
 ```
+
+> ###_The incoming fax implementation is not tested._
 
 Look into the source code for a clearer understanding.
