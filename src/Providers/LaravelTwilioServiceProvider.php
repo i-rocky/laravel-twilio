@@ -42,7 +42,7 @@ class LaravelTwilioServiceProvider extends ServiceProvider
 
         $this->app->register(RouteServiceProvider::class);
 
-        if ($this->app->environment() === 'local') {
+        if (config('laravel-twilio.env') === 'dev') {
             $this->app->register(EventServiceProvider::class);
         }
 
