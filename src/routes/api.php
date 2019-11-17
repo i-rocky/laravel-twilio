@@ -12,7 +12,7 @@ Route::group(['middleware' => 'verify-twilio-request'], function () {
     Route::post('voice/record', [TwimlAppController::class, 'voiceRecord'])->name('api.laravel-twilio.voice.record');
 
 // fax
-    Route::post('fax', [MessageController::class, 'faxPing'])->name('api.laravel-twilio.fax.ping');
+    Route::post('fax/incoming', [MessageController::class, 'faxPing'])->name('api.laravel-twilio.fax.ping');
     Route::post('fax/receive', [MessageController::class, 'receiveFax'])->name('api.laravel-twilio.fax.receive');
     Route::post('report/fax/status', [MessageController::class, 'faxDeliveryReport'])->name('api.laravel-twilio.fax.report');
 
