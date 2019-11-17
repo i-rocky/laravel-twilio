@@ -1,7 +1,7 @@
 {
   "name": "i-rocky/laravel-twilio",
   "description": "Twilio Fax, SMS, MMS, Voice Call recording, receiving, sending support for laravel",
-  "version": "2.0.2",
+  "version": "1.0.0",
   "type": "library",
   "license": "MIT",
   "authors": [
