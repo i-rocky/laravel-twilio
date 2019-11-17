@@ -2,6 +2,8 @@
 
 namespace Rocky\LaravelTwilio;
 
+use Rocky\LaravelTwilio\Services\TwilioService;
+
 class LaravelTwilio
 {
     /**
@@ -21,9 +23,9 @@ class LaravelTwilio
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getSender()
+    public function getSender() : string
     {
         return $this->twilioConfig->getSender();
     }
@@ -31,7 +33,7 @@ class LaravelTwilio
     /**
      * @return TwilioService
      */
-    public function getTwilioService()
+    public function getTwilioService() : TwilioService
     {
         return $this->twilioService;
     }

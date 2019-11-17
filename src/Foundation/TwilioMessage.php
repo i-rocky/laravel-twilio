@@ -4,6 +4,7 @@ namespace Rocky\LaravelTwilio\Foundation;
 
 use Rocky\LaravelTwilio\Exceptions\MediaUrlUndefinedException;
 use Rocky\LaravelTwilio\Exceptions\MessageContentUndefinedException;
+use Rocky\LaravelTwilio\Exceptions\MessageTypeUndefinedException;
 use Rocky\LaravelTwilio\Exceptions\ReceiverUndefinedException;
 use Rocky\LaravelTwilio\LaravelTwilio;
 use Twilio\Rest\Api\V2010\Account\MessageInstance;
@@ -16,6 +17,22 @@ abstract class TwilioMessage
     private $_content;
     protected $_mediaUrlRequired = false;
     private $_mediaUrl;
+    protected $_type;
+
+    /**
+     * For developers
+     *
+     * @return mixed
+     * @throws MessageTypeUndefinedException
+     */
+    protected function _getType()
+    {
+        if ( ! $this->_type) {
+            throw new MessageTypeUndefinedException();
+        }
+
+        return $this->_type;
+    }
 
     /**
      * @param $sender
@@ -125,16 +142,24 @@ abstract class TwilioMessage
      *
      * @return string
      */
-    protected function _getSender(LaravelTwilio $laravelTwilio)
+    protected function _getSender(LaravelTwilio $laravelTwilio): string
     {
         return $this->_sender ?: $laravelTwilio->getSender();
+    }
+
+    /**
+     * @return string
+     */
+    protected function _getStatusCallbackRoute(): string
+    {
+        return route('api.laravel-twilio.message.status');
     }
 
     /**
      * @param $notifiable
      * @param  LaravelTwilio  $laravelTwilio
      *
-     * @return mixed
+     * @return MessageInstance
      */
     abstract public function send($notifiable, LaravelTwilio $laravelTwilio);
 }

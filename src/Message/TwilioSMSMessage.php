@@ -12,6 +12,7 @@ use Twilio\Rest\Api\V2010\Account\MessageInstance;
 class TwilioSMSMessage extends TwilioMessage
 {
     protected $_contentRequired = true;
+    protected $_type = 'SMS';
 
     /**
      * @param $notifiable
@@ -32,8 +33,9 @@ class TwilioSMSMessage extends TwilioMessage
             ->getTwilioService()
             ->messages
             ->create($receiver, [
-                'body' => $content,
-                'from' => $sender,
+                'body'           => $content,
+                'from'           => $sender,
+                'statusCallback' => $this->_getStatusCallbackRoute($laravelTwilio),
             ]);
     }
 }

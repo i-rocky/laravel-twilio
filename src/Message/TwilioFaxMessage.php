@@ -12,15 +12,16 @@ use Twilio\Rest\Fax\V1\FaxInstance;
 class TwilioFaxMessage extends TwilioMessage
 {
     protected $_mediaUrlRequired = true;
+    protected $_type = 'Fax';
 
     /**
      * @param $notifiable
      * @param  LaravelTwilio  $laravelTwilio
      *
      * @return FaxInstance
+     * @throws MediaUrlUndefinedException
      * @throws ReceiverUndefinedException
      * @throws TwilioException
-     * @throws MediaUrlUndefinedException
      */
     public function send($notifiable, LaravelTwilio $laravelTwilio)
     {
@@ -34,7 +35,8 @@ class TwilioFaxMessage extends TwilioMessage
             ->v1
             ->faxes
             ->create($receiver, $mediaUrl, [
-                'from' => $sender,
+                'from'           => $sender,
+                'statusCallback' => $this->_getStatusCallbackRoute($laravelTwilio),
             ]);
     }
 }

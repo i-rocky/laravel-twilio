@@ -13,16 +13,17 @@ use Twilio\Rest\Api\V2010\Account\MessageInstance;
 class TwilioMMSMessage extends TwilioMessage
 {
     protected $_mediaUrlRequired = true;
+    protected $_type = 'MMS';
 
     /**
      * @param $notifiable
      * @param  LaravelTwilio  $laravelTwilio
      *
      * @return MessageInstance
+     * @throws MediaUrlUndefinedException
      * @throws MessageContentUndefinedException
      * @throws ReceiverUndefinedException
      * @throws TwilioException
-     * @throws MediaUrlUndefinedException
      */
     public function send($notifiable, LaravelTwilio $laravelTwilio)
     {
@@ -35,9 +36,10 @@ class TwilioMMSMessage extends TwilioMessage
             ->getTwilioService()
             ->messages
             ->create($receiver, [
-                'body'     => $content,
-                'from'     => $sender,
-                'mediaUrl' => $mediaUrl,
+                'body'           => $content,
+                'from'           => $sender,
+                'mediaUrl'       => $mediaUrl,
+                'statusCallback' => $this->_getStatusCallbackRoute($laravelTwilio),
             ]);
     }
 }

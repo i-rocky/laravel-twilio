@@ -1,6 +1,6 @@
 <?php
 
-namespace Rocky\LaravelTwilio;
+namespace Rocky\LaravelTwilio\Services;
 
 use Twilio\Rest\Client;
 

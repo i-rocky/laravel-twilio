@@ -12,6 +12,7 @@ use Twilio\Rest\Api\V2010\Account\CallInstance;
 class TwilioCallMessage extends TwilioMessage
 {
     protected $_mediaUrlRequired = true;
+    protected $_type = 'Call';
 
     /**
      * @param $notifiable

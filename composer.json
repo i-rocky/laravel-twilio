@@ -1,7 +1,7 @@
 {
   "name": "i-rocky/laravel-twilio",
-  "description": "Twilio Fax, SMS, Call notification support for laravel",
-  "version": "1.0.0",
+  "description": "Twilio Fax, SMS, Call receiving and sending support along with dashboard for laravel",
+  "version": "2.0.0",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -15,17 +15,30 @@
       "Rocky\\LaravelTwilio\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Rocky\\LaravelTwilio\\Tests\\": "tests"
+    }
+  },
   "extra": {
     "laravel": {
       "providers": [
-        "Rocky\\LaravelTwilio\\Providers\\TwilioServiceProvider"
+        "Rocky\\LaravelTwilio\\Providers\\LaravelTwilioServiceProvider"
       ],
       "aliases": {
-        "LaravelTwilio": "Rocky\\LaravelTwilio\\Facade"
+        "LaravelTwilio": "Rocky\\LaravelTwilio\\LaravelTwilio"
       }
     }
   },
   "require": {
     "twilio/sdk": "^5.38"
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "test-f": "vendor/bin/phpunit --filter"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^4.0",
+    "phpunit/phpunit": "^8.4"
   }
 }
