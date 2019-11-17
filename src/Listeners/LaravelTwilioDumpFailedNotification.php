@@ -28,7 +28,7 @@ class LaravelTwilioDumpFailedNotification
     public function handle(LaravelTwilioMessageSendingFailed $event)
     {
         if (app()->runningInConsole() && app()->environment() === 'local') {
-            dd($event->exception);
+            dd($event->getException());
         }
     }
 }
