@@ -28,14 +28,7 @@ class MessageController extends Controller
      */
     public function receiveMessage(Request $request)
     {
-        $from       = $request->get('From');
-        $to         = $request->get('To');
-        $messageSid = $request->get('MessageSid');
-        $accountSid = $request->get('AccountSid');
-        $body       = $request->get('Body');
-        $mediaUrl   = $request->get('OriginalMediaUrl');
-
-        $message = new IncomingMessage($from, $to, $accountSid, $messageSid, $body, $mediaUrl);
+        $message = new IncomingMessage($request->all());
 
         event(new LaravelTwilioIncomingMessage($message));
 
@@ -71,7 +64,7 @@ class MessageController extends Controller
         $accountSid = $request->get('AccountSid');
         $mediaUrl   = $request->get('OriginalMediaUrl');
 
-        $message = new IncomingFax($from, $to, $accountSid, $faxSid, $mediaUrl);
+        $message = new IncomingFax($request->all());
 
         event(new LaravelTwilioIncomingFax($message));
 
@@ -85,10 +78,7 @@ class MessageController extends Controller
      */
     public function messageDeliveryReport(Request $request)
     {
-        $accountSid    = $request->get('AccountSid');
-        $messageSid    = $request->get('MessageSid');
-        $messageStatus = $request->get('MessageStatus');
-        $report        = new MessageDeliveryReport($accountSid, $messageSid, $messageStatus);
+        $report        = new MessageDeliveryReport($request->all());
         event(new LaravelTwilioMessageDeliveryReport($report));
 
         return response()->json(['message' => 'Delivery Report Received']);
@@ -101,10 +91,7 @@ class MessageController extends Controller
      */
     public function faxDeliveryReport(Request $request)
     {
-        $accountSid = $request->get('AccountSid');
-        $faxSid     = $request->get('FaxSid');
-        $faxStatus  = $request->get('FaxStatus');
-        $report     = new FaxDeliveryReport($accountSid, $faxSid, $faxStatus);
+        $report     = new FaxDeliveryReport($request->all());
         event(new LaravelTwilioFaxDeliveryReport($report));
 
         return response()->json(['message' => 'Delivery Report Received']);

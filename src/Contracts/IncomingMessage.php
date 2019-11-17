@@ -2,86 +2,19 @@
 
 namespace Rocky\LaravelTwilio\Contracts;
 
+use Rocky\LaravelTwilio\Foundation\TwilioResponse;
+
 /**
  * Class IncomingMessage
  *
  * @package Rocky\LaravelTwilio\Contracts
+ *
+ * @property string MessageSid
+ * @property string Body
+ * @property string OriginalMediaUrl
+ * @property string MediaUrl
  */
-class IncomingMessage
+class IncomingMessage extends TwilioResponse
 {
-    private $from;
-    private $to;
-    private $accountSid;
-    private $messageSid;
-    private $body;
-    private $mediaUrl;
 
-    /**
-     * IncomingMessage constructor.
-     *
-     * @param $from
-     * @param $to
-     * @param $accountSid
-     * @param $messageSid
-     * @param $body
-     * @param $mediaUrl
-     */
-    public function __construct($from, $to, $accountSid, $messageSid, $body, $mediaUrl)
-    {
-
-        $this->from       = $from;
-        $this->to         = $to;
-        $this->accountSid = $accountSid;
-        $this->messageSid = $messageSid;
-        $this->body       = $body;
-        $this->mediaUrl   = $mediaUrl;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFrom()
-    {
-        return $this->from;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTo()
-    {
-        return $this->to;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccountSid()
-    {
-        return $this->accountSid;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMessageSid()
-    {
-        return $this->messageSid;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->body;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMediaUrl()
-    {
-        return $this->mediaUrl;
-    }
 }

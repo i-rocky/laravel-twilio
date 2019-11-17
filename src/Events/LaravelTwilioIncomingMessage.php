@@ -13,7 +13,7 @@ class LaravelTwilioIncomingMessage
     /**
      * @var IncomingMessage
      */
-    public $message;
+    private $message;
 
     /**
      * @return IncomingMessage

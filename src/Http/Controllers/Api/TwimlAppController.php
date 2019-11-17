@@ -16,6 +16,7 @@ use Rocky\LaravelTwilio\Events\LaravelTwilioCallStatusUpdate;
 use Rocky\LaravelTwilio\Events\LaravelTwilioInboundCall;
 use Rocky\LaravelTwilio\Events\LaravelTwilioInboundCallRejected;
 use Rocky\LaravelTwilio\Events\LaravelTwilioOutboundCall;
+use Rocky\LaravelTwilio\Exceptions\IdentityMethodNotImplementedException;
 use Rocky\LaravelTwilio\Http\Controllers\Controller;
 use Twilio\Jwt\ClientToken;
 use Twilio\TwiML\VoiceResponse;
@@ -101,7 +102,21 @@ class TwimlAppController extends Controller
      */
     public function getCapabilityToken(Request $request)
     {
-        $identity = Str::snake($request->user()->first_name); // TODO: patch for username
+        $user     = $request->user();
+        $identity = null;
+
+        if (method_exists($user, 'laravelTwilioIdentity')) {
+            $identity = $user->laravelTwilioIdentity();
+        } elseif ($user->username) {
+            $identity = $user->username;
+        }
+
+        if ( ! $identity) {
+            $ex = new IdentityMethodNotImplementedException();
+
+            // not an API route
+            return response()->json($ex, 500);
+        }
 
         $clientToken = new ClientToken(config('services.twilio.account_sid'), config('services.twilio.auth_token'));
         $clientToken->allowClientOutgoing(config('services.twilio.app_sid'));
