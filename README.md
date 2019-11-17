@@ -12,8 +12,8 @@ This should publish the following files
 
 ```tree
 project
-|   config
-|   |   laravel-twilio.php
+└───config
+|       laravel-twilio.php
 |
 └───resources
     └───assets
