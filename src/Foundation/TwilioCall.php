@@ -6,71 +6,94 @@ namespace Rocky\LaravelTwilio\Foundation;
  * Class TwilioCall
  *
  * @package Rocky\LaravelTwilio\Contracts
+ *
+ * @property string Caller
+ * @property string Called
+ * @property string CallSid
+ * @property string CallStatus
+ * @property string Digits
  */
-abstract class TwilioCall
+abstract class TwilioCall extends TwilioResponse
 {
-    private $from;
-    private $to;
-    private $accountSid;
-    private $callSid;
-    private $status;
+    /**
+     * @return bool
+     */
+    public function queued()
+    {
+        return $this->_isStatus('queued');
+    }
 
     /**
-     * InboundCall constructor.
-     *
-     * @param $from
-     * @param $to
-     * @param $accountSid
-     * @param $callSid
+     * @return bool
+     */
+    public function initiated()
+    {
+        return $this->_isStatus('initiated');
+    }
+
+    /**
+     * @return bool
+     */
+    public function ringing()
+    {
+        return $this->_isStatus('ringing');
+    }
+
+    /**
+     * @return bool
+     */
+    public function inProgress()
+    {
+        return $this->_isStatus('in-progress');
+    }
+
+    /**
+     * @return bool
+     */
+    public function busy()
+    {
+        return $this->_isStatus('busy');
+    }
+
+    /**
+     * @return bool
+     */
+    public function failed()
+    {
+        return $this->_isStatus('failed');
+    }
+
+    /**
+     * @return bool
+     */
+    public function noAnswer()
+    {
+        return $this->_isStatus('no-answer');
+    }
+
+    /**
+     * @return bool
+     */
+    public function completed()
+    {
+        return $this->_isStatus('completed');
+    }
+
+    /**
      * @param $status
+     *
+     * @return bool
      */
-    public function __construct($from, $to, $accountSid, $callSid, $status)
+    private function _isStatus($status)
     {
-
-        $this->from       = $from;
-        $this->to         = $to;
-        $this->accountSid = $accountSid;
-        $this->callSid    = $callSid;
-        $this->status     = $status;
+        return $this->CallStatus === $status;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getFrom()
+    public function hungup()
     {
-        return $this->from;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTo()
-    {
-        return $this->to;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAccountSid()
-    {
-        return $this->accountSid;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCallSid()
-    {
-        return $this->callSid;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStatus()
-    {
-        return $this->status;
+        return $this->Digits === 'hangup' && $this->completed();
     }
 }

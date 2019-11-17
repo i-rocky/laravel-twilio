@@ -7,9 +7,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
+use Rocky\LaravelTwilio\Contracts\CallRecord;
 use Rocky\LaravelTwilio\Contracts\CallStatus;
 use Rocky\LaravelTwilio\Contracts\InboundCall;
 use Rocky\LaravelTwilio\Contracts\OutboundCall;
+use Rocky\LaravelTwilio\Events\LaravelTwilioCallRecord;
 use Rocky\LaravelTwilio\Events\LaravelTwilioCallStatusUpdate;
 use Rocky\LaravelTwilio\Events\LaravelTwilioInboundCall;
 use Rocky\LaravelTwilio\Events\LaravelTwilioInboundCallRejected;
@@ -33,20 +35,32 @@ class TwimlAppController extends Controller
 
         // construct the call resource
         $contractClass = $outbound ? OutboundCall::class : InboundCall::class;
-        $contract      = new $contractClass(
-            $request->get('From'),
-            $request->get('To'),
-            $request->get('AccountSid'),
-            $request->get('CallSid'),
-            $request->get('CallStatus')
-        );
+        /** @var InboundCall|OutboundCall $contract */
+        $contract = new $contractClass($request->all());
+
+        // check if we got hangup status from recording or wherever
+        if ($contract->hungup()) {
+            $response->hangup();
+
+            return response($response->asXML(), 200, ['Content-Type' => 'application/xml']);
+        }
 
         $canGetIn = $outbound || config('laravel-twilio.call.enable');
         if ($canGetIn && $request->get('To')) {
             // call acceptable
             $callerId = $outbound ? config('services.twilio.caller_id') : $request->get('From');
-            $dial     = $response->dial(null, ['callerId' => $callerId]);
-            $attrs    = [
+
+            // setup dial attributes
+            $dialAttrs = ['callerId' => $callerId];
+            if (config('laravel-twilio.call.record')) {
+                $dialAttrs['record']                       = 'record-from-answer';
+                $dialAttrs['recordingStatusCallback']      = route('api.laravel-twilio.voice.record');
+                $dialAttrs['recordingStatusCallbackEvent'] = 'in-progress completed absent failed';
+            }
+            $dial = $response->dial(null, $dialAttrs);
+
+            // setup number/client attributes
+            $attrs = [
                 'statusCallbackEvent'  => 'initiated ringing answered completed',
                 'statusCallback'       => route('api.laravel-twilio.voice.status'),
                 'statusCallbackMethod' => 'POST',
@@ -74,6 +88,7 @@ class TwimlAppController extends Controller
                 event(new LaravelTwilioInboundCallRejected($contract));
             }
         }
+
         $xml = $response->asXML();
 
         return response($xml, 200, ['Content-Type' => 'application/xml']);
@@ -86,7 +101,7 @@ class TwimlAppController extends Controller
      */
     public function getCapabilityToken(Request $request)
     {
-        $identity = Str::snake($request->user()->first_name);
+        $identity = Str::snake($request->user()->first_name); // TODO: patch for username
 
         $clientToken = new ClientToken(config('services.twilio.account_sid'), config('services.twilio.auth_token'));
         $clientToken->allowClientOutgoing(config('services.twilio.app_sid'));
@@ -105,14 +120,23 @@ class TwimlAppController extends Controller
      */
     public function voiceStatusReport(Request $request)
     {
-        $accountSid   = $request->get('AccountSid');
-        $callSid      = $request->get('CallSid');
-        $callStatus   = $request->get('CallStatus');
-        $callDuration = $request->get('CallDuration');
-
-        $status = new CallStatus($accountSid, $callSid, $callStatus, $callDuration);
+        $status = new CallStatus($request->all());
 
         event(new LaravelTwilioCallStatusUpdate($status));
+
+        return response('');
+    }
+
+    /**
+     * @param  Request  $request
+     *
+     * @return ResponseFactory|Response
+     */
+    public function voiceRecord(Request $request)
+    {
+        // dispatch the call record event
+        $record = new CallRecord($request->all());
+        event(new LaravelTwilioCallRecord($record));
 
         return response('');
     }

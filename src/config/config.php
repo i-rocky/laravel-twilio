@@ -12,6 +12,11 @@ return [
         'enable'  => env('LARAVEL_TWILIO_ENABLE_CALL', false),
 
         /**
+         * Enable or disable call recordings
+         */
+        'record'  => env('LARAVEL_TWILIO_RECORD_CALL', false),
+
+        /**
          * Read this message when call is disabled
          * Set message to null to just reject calls
          */
