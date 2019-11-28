@@ -141,7 +141,7 @@ class TwimlAppController extends Controller
             $ex = new IdentityMethodNotImplementedException();
 
             // not an API route
-            return response()->json($ex, 500);
+            return response()->json(['message' => $ex->getMessage()], 500);
         }
 
         $clientToken = new ClientToken(config('services.twilio.account_sid'), config('services.twilio.auth_token'));
