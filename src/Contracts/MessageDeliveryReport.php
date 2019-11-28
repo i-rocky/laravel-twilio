@@ -2,6 +2,8 @@
 
 namespace Rocky\LaravelTwilio\Contracts;
 
+use Rocky\LaravelTwilio\Foundation\TwilioResponse;
+
 /**
  * Class IncomingMessage
  *
@@ -10,7 +12,7 @@ namespace Rocky\LaravelTwilio\Contracts;
  * @property string MessageSid
  * @property string MessageStatus
  */
-class MessageDeliveryReport
+class MessageDeliveryReport extends TwilioResponse
 {
 
 }
