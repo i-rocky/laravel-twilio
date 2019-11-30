@@ -15,6 +15,14 @@ class TwilioFaxMessage extends TwilioMessage
     protected $_type = 'Fax';
 
     /**
+     * @return string
+     */
+    protected function _getStatusCallbackRoute(): string
+    {
+        return route('api.laravel-twilio.fax.report');
+    }
+
+    /**
      * @param $notifiable
      * @param  LaravelTwilio  $laravelTwilio
      *
@@ -36,7 +44,7 @@ class TwilioFaxMessage extends TwilioMessage
             ->faxes
             ->create($receiver, $mediaUrl, [
                 'from'           => $sender,
-                'statusCallback' => $this->_getStatusCallbackRoute($laravelTwilio),
+                'statusCallback' => $this->_getStatusCallbackRoute(),
             ]);
     }
 }

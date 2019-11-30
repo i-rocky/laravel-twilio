@@ -35,7 +35,7 @@ class TwilioSMSMessage extends TwilioMessage
             ->create($receiver, [
                 'body'           => $content,
                 'from'           => $sender,
-                'statusCallback' => $this->_getStatusCallbackRoute($laravelTwilio),
+                'statusCallback' => $this->_getStatusCallbackRoute(),
             ]);
     }
 }

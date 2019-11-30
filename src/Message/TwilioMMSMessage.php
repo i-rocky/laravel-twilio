@@ -39,7 +39,7 @@ class TwilioMMSMessage extends TwilioMessage
                 'body'           => $content,
                 'from'           => $sender,
                 'mediaUrl'       => $mediaUrl,
-                'statusCallback' => $this->_getStatusCallbackRoute($laravelTwilio),
+                'statusCallback' => $this->_getStatusCallbackRoute(),
             ]);
     }
 }
